@@ -2,11 +2,6 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
-// Sends custom messages
-// app.get('/', function(req, res){
-//     res.send('<h1>Hello world</h1>');
-// });
-
 //sends an index.html file to the client given the user routes to a directory
 app.get('/', function(req, res){
     res.sendFile(__dirname + '/index.html');
@@ -32,4 +27,9 @@ io.on('connection', function(socket){
         // inform the users a user disconnected
         io.emit('user disconnected');
     });
+
+    socket.on('user typing', function(){
+        io.emit('user typing');
+    });
+
 });
