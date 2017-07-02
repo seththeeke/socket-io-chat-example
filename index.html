@@ -18,13 +18,29 @@
 <script>
     $(function () {
         var socket = io();
+
+        // emits the message and event when form is submitted
+        // emitting a message from here requires a catch and
+        // emit from the index.js in order to catch in the html js
         $('form').submit(function(){
             socket.emit('chat message', $('#m').val());
             $('#m').val('');
             return false;
         });
+
+        // catches the message from others
         socket.on('chat message', function(msg){
             $('#messages').append($('<li>').text(msg));
+        });
+
+        // catches the user disconnected message
+        socket.on('user disconnected', function(){
+            $('#messages').append($('<li>').text("A user has disconnected"));
+        });
+
+        // catches the user connected message
+        socket.on('user connected', function(){
+            $('#messages').append($('<li>').text("A user has connected"));
         });
     });
 </script>
