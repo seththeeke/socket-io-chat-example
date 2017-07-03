@@ -13,8 +13,10 @@ http.listen(3000, function(){
 
 // When a user connects
 io.on('connection', function(socket){
-    // inform the users a user connected
-    io.emit('user connected');
+
+    socket.on('user entered', function(nickname){
+        io.emit('user entered', nickname);
+    });
 
     // When a message is sent
     socket.on('chat message', function(msg){
