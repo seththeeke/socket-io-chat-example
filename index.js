@@ -14,6 +14,7 @@ http.listen(3000, function(){
 // When a user connects
 io.on('connection', function(socket){
 
+    // tell users that someone has entered
     socket.on('user entered', function(nickname){
         io.emit('user entered', nickname);
     });
@@ -30,8 +31,8 @@ io.on('connection', function(socket){
         io.emit('user disconnected');
     });
 
-    socket.on('user typing', function(){
-        io.emit('user typing');
+    socket.on('user typing', function(nickname){
+        io.emit('user typing', nickname);
     });
 
 });

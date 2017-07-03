@@ -12,6 +12,10 @@
         #messages { list-style-type: none; margin: 0; padding: 0; }
         #messages li { padding: 5px 10px; }
         #messages li:nth-child(odd) { background: #eee; }
+
+        .no-display {
+            display: none;
+        }
     </style>
 </head>
 <script src="/socket.io/socket.io.js"></script>
@@ -29,8 +33,11 @@
             return false;
         });
 
+        // catches the nickname submit
         $('#nicknameForm').submit(function(){
             socket.emit('user entered', $('#nicknameInput').val());
+            $('#nicknameWrapper').addClass('no-display');
+            $('#messagesWrapper').removeClass('no-display');
             return false;
         });
 
@@ -50,23 +57,23 @@
         });
 
         // catches the user typing event
-        socket.on('user typing', function(){
-            $('#messages').append($('<li>').text("A user is typing"));
+        socket.on('user typing', function(nickname){
+            $('#messages').append($('<li>').text(nickname + " is typing"));
         });
 
         // listens for a user typing a message
         $('#m').on("change keyup paste", function(){
-            socket.emit('user typing');
+            socket.emit("user typing", $('#nicknameInput').val());
         });
     });
 </script>
 <body>
-<div>
+<div id="nicknameWrapper">
     <form id="nicknameForm" action="">
         <input id="nicknameInput" autocomplete="off" /><button>Send</button>
     </form>
 </div>
-<div>
+<div id="messagesWrapper" class="no-display">
     <ul id="messages"></ul>
     <form id="messageForm" action="">
         <input id="m" autocomplete="off" /><button>Send</button>
